@@ -48,4 +48,17 @@ router.post(
   }
 );
 
+// @route   DELETE api/notes/:id
+// @desc    Delete note
+// @access  Private
+router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+    User.findOne({user: req.useer.id}).then(user => {
+        Note.findById(req.params.id)
+        .then(note => {
+            note.remove().then(() => res.json({success: "Note Deleted"}))
+        })
+        .catch(err => res.status(404).json({notFound: 'Note not found'}))
+    })
+})
+
 module.exports = router;
