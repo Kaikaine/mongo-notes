@@ -65,3 +65,19 @@ router.post('/login', (req,res) => {
     })
     .catch(err => console.log(err))
 })
+
+// route    GET api/users/current
+// desc     Return current user
+// access   private
+router.get(
+    "/current",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      res.json({
+        id: req.user.id,
+        name: req.user.name,
+      });
+    }
+  );
+  
+  module.exports = router;
