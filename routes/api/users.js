@@ -8,6 +8,9 @@ const passport = require("passport");
 const User = require("../../models/User");
 require("../../config/passport")(passport);
 
+// route    POST api/users/register
+// desc     register a user
+// access   public
 router.post('/register', (req, res) => {
     User.findOne({name: req.body.name}).then(user => {
         if(user) {
@@ -34,4 +37,31 @@ router.post('/register', (req, res) => {
             });
           });
     })
+})
+
+// route    GET api/users/login
+// desc     Login user / return jwt token
+// access   public
+router.post('/login', (req,res) => {
+    User.findOne({name: req.body.name}).then(user => {
+        // check password
+        bcrypt.compare(req.body.password, user.password).then(isMatch => {
+            if(isMatch) {
+                const payload = {
+                    id: user._id,
+                    name: user.name
+                }
+
+                jwt.sign(payload, keys.secret, {expiresIn: 3600}, (err, token) => {
+                    res.json({
+                        success: true,
+                        token: "Bearer " + token
+                    })
+                })
+            } else {
+                return res.status(400).json({error: 'Password incorrect'})
+            }
+        })
+    })
+    .catch(err => console.log(err))
 })
