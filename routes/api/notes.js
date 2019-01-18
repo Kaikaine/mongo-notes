@@ -43,20 +43,18 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log(req.user)
-      
-    const newNote = new Note({
-        user: req.user._id,
+    
+    User.findById(req.user.id)
+    .then(user => {
+      const newNote = {
         title: req.body.title,
         content: req.body.content
-    })
+      }
 
-    newNote.save().then(note => {
-        
-            res.json(note);
-          
+      user.notes.unshift(newNote)
+
+      user.save().then(user => res.json(user))
     })
-    .catch(err => res.status(400).json(err))
   }
 );
 
