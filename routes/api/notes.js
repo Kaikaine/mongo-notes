@@ -6,6 +6,16 @@ const passport = require("passport");
 const Note = require("../../models/Note");
 const User = require("../../models/User");
 
+// @route   GET api/notes/all
+// @desc    Get all notes
+// @access  Public
+router.get('/', (req, res) => {
+    Note.find()
+      .sort({ date: -1 })
+      .then(posts => res.json(posts))
+      .catch(err => res.status(404).json({ noNotessfound: 'No notes found' }));
+  });
+
 // @route   GET api/notes
 // @desc    Get notes
 // @access  Private
@@ -28,23 +38,25 @@ router.get(
 
 // @route   POST api/notes
 // @desc    Create note
-// @access  Private
+// @access  private
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.user)
       
     const newNote = new Note({
-        user: req.user.id,
+        user: req.user._id,
         title: req.body.title,
         content: req.body.content
     })
 
     newNote.save().then(note => {
-        if (note.user == User._id) {
+        
             res.json(note);
-          }
+          
     })
+    .catch(err => res.status(400).json(err))
   }
 );
 

@@ -36,10 +36,20 @@ router.post('/register', (req, res) => {
                 });
             });
           });
+
     })
 })
 
-// route    GET api/users/login
+// route    GET api/users/all
+// desc     shows all users
+// access   public
+router.get('/all', (req, res) => {
+    User.find()
+    .then(user => res.json(user))
+    .catch(err => res.status(404).json({error: 'No users found'}))
+})
+
+// route    POST api/users/login
 // desc     Login user / return jwt token
 // access   public
 router.post('/login', (req,res) => {

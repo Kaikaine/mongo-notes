@@ -10,6 +10,16 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    notes: [
+        {
+            title: {
+                type: String,
+            },
+            content: {
+                type: String
+            }
+        }
+    ],
     date: {
         type: Date,
         default: Date.now
