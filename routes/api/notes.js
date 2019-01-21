@@ -6,16 +6,6 @@ const passport = require("passport");
 const Note = require("../../models/Note");
 const User = require("../../models/User");
 
-// @route   GET api/notes/all
-// @desc    Get all notes
-// @access  Public
-// router.get('/', (req, res) => {
-//     Note.find()
-//       .sort({ date: -1 })
-//       .then(posts => res.json(posts))
-//       .catch(err => res.status(404).json({ noNotessfound: 'No notes found' }));
-//   });
-
 // @route   GET api/notes
 // @desc    Get notes
 // @access  Private
@@ -60,7 +50,6 @@ router.post(
 // @access  Private
 router.delete('/delete/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
     User.findById(req.user.id).then(user => {
-      console.log(`USER: ${user}, ID: ${req.params.id}`)
 
       if (
         user.notes.filter(
@@ -80,7 +69,7 @@ router.delete('/delete/:id', passport.authenticate('jwt', {session: false}), (re
 
       user.save().then(user => res.json(user))
     })
-    .catch(err => res.status(404).json({notFound: 'Note not found'}))
+    .catch(err => res.status(404).json({notFound: 'Error retrieving notes'}))
 })
 
 module.exports = router;
