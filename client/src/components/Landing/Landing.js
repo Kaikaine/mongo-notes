@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 const Landing = () => {
     return ( <div className='landing'>
@@ -9,14 +10,14 @@ const Landing = () => {
                     Simple Notes
                 </span>
                 <span className='secondary-text'>
-                    A Simple Note Taking App
+                    Simple Note Taking For The Simple Person
                 </span>
             </h1>
         </div>
 
         <div className="buttons">
-            <button className='login btn' type='button'>Login</button>
-            <button className='register btn' type='button'>Register</button>
+            <Link to='/login'><button className='login btn' type='button'>Login</button></Link>
+            <Link to='/register'><button className='register btn' type='button'>Register</button></Link>
         </div>
 
     </div> );
